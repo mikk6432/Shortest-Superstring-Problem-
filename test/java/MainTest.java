@@ -39,7 +39,6 @@ class MainTest {
 
     public int numOfChars(List<String> list){
         int result = 0;
-        System.out.println(result);
         for(String s: list){
             result = result + s.length();
         }
