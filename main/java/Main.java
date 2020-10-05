@@ -17,19 +17,22 @@ public class Main {
                 for (int second = first+1, namesSize = names.size(); second < namesSize; second++) {
                     String secondName = names.get(second);
 
-                    int firstNameLength = firstName.length();
-                    int secondNameLength = secondName.length();
-                    int overlapMax = 0;
 
-                    if (secondName.contains(firstName)) {
-                        System.out.println(names.get(second) + " contains first: " + names.get(first));
-                        names.remove(first);
+
+                    if (firstName.contains(secondName)) {
+                        System.out.println(names.get(first) + " contains second: " + names.get(second));
+                        names.remove(second);
                         size--;
                         namesSize--;
                         second--;
                         System.out.println(size);
-                        break;
+                        secondName = names.get(second);
                     }
+                    System.out.println("Does second index: " + second + " match with: " + names.get(second) );
+
+                    int firstNameLength = firstName.length();
+                    int secondNameLength = secondName.length();
+                    int overlapMax = 0;
 
                     for (int firstIndex = Math.min(firstNameLength, secondNameLength) - 1; firstIndex >= 0; firstIndex--) {
                         if (firstName.substring(0, firstIndex + 1).equals(secondName.substring(secondNameLength - 1 - firstIndex, secondNameLength))) {
@@ -48,6 +51,10 @@ public class Main {
                     }
 
                     if (overlapMax > maxAmountOfOverlap) {
+                        System.out.println("max oberlap: " + overlapMax);
+                        System.out.println(names.toString());
+                        System.out.println("first index + name: " + first + " " + names.get(first));
+                        System.out.println("second index + name: " + second + " " + names.get(second));
                         maxAmountOfOverlap = overlapMax;
                         maxIndexFirstName = first;
                         maxIndexSecondName = second;

@@ -5,20 +5,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static org.junit.Assert.assertEquals;
 
 class MainTest {
 
-    int listSize = 500;
+    int listSize = 100;
     List<String> names;
+    List<String> original;
     Main testClass;
 
     @BeforeEach
     void setUp() {
         testClass = new Main();
         names = new ArrayList<>(listSize);
-        for(int i = 0; i< listSize; i++) {
+        for(int i = 0; i < listSize; i++) {
             names.add(randomString());
         }
+        original = names;
     }
 
 
@@ -47,15 +50,20 @@ class MainTest {
 
     @Test
     public void makeNameNaive() {
-        System.out.println("Original list = " + names.toString());
-        int lengthOfOriginal = numOfChars(names);
+
+        System.out.println("Original list = " + original.toString());
+        int lengthOfOriginal = numOfChars(original);
         String result = testClass.makeNameNaive(this.names);
         int lengthOfNew = result.length();
-        int score = ((lengthOfOriginal-lengthOfNew)/lengthOfOriginal);
+        double score = ((lengthOfOriginal-lengthOfNew)/lengthOfOriginal);
+        System.out.println("New list = " + result);
         System.out.println("Original length = " + lengthOfOriginal);
         System.out.println("Found length = " + lengthOfNew);
         System.out.println("Score: " + score);
 
+        for(String s : names){
+            assertEquals(result.contains(s), true);
+        }
         System.out.println("result = " + result);
     }
 }
