@@ -1,3 +1,4 @@
+import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -5,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 class MainTest {
 
-    int listSize = 100;
+    int listSize = 200;
     List<String> names;
     List<String> original;
     Main testClass;
@@ -18,10 +19,12 @@ class MainTest {
     void setUp() {
         testClass = new Main();
         names = new ArrayList<>(listSize);
+        original = new ArrayList<>(listSize);
         for(int i = 0; i < listSize; i++) {
-            names.add(randomString());
+            String randomString = randomString();
+            names.add(randomString);
+            original.add(randomString);
         }
-        original = names;
     }
 
 
@@ -49,20 +52,57 @@ class MainTest {
     }
 
     @Test
+    public void overlapTest() {
+        String firstString = "abc";
+        String secondString = "cde";
+        assertThat(Main.findOverlap(firstString, secondString), Is.is(1));
+        assertThat(Main.findOverlap(secondString, firstString), Is.is(0));
+    }
+
+    @Test
+    public void overlapTestNoOverlap() {
+        String firstString = "abc";
+        String secondString = "def";
+        assertThat(Main.findOverlap(firstString, secondString), Is.is(0));
+        assertThat(Main.findOverlap(secondString, firstString), Is.is(0));
+    }
+
+    @Test
+    public void overlapTestDifferentLengths() {
+        String firstString = "abcde";
+        String secondString = "ea";
+        assertThat(Main.findOverlap(firstString, secondString), Is.is(1));
+        assertThat(Main.findOverlap(secondString, firstString), Is.is(1));
+    }
+
+    @Test
+    public void overlapTestAlotOfOverlap() {
+        String firstString = "abcde";
+        String secondString = "bcdef";
+        assertThat(Main.findOverlap(firstString, secondString), Is.is(4));
+        assertThat(Main.findOverlap(secondString, firstString), Is.is(0));
+    }
+
+
+
+    @Test
     public void makeNameNaive() {
 
         System.out.println("Original list = " + original.toString());
         int lengthOfOriginal = numOfChars(original);
         String result = testClass.makeNameNaive(this.names);
         int lengthOfNew = result.length();
-        double score = ((lengthOfOriginal-lengthOfNew)/lengthOfOriginal);
         System.out.println("New list = " + result);
         System.out.println("Original length = " + lengthOfOriginal);
         System.out.println("Found length = " + lengthOfNew);
-        System.out.println("Score: " + score);
 
-        for(String s : names){
-            assertEquals(result.contains(s), true);
+        for(String s : original){
+            if(!result.contains(s)) {
+                System.out.println(result + " Does not contain: " + s);
+            } else{
+                System.out.println(result + "Does contain: " + s);
+            }
+            assertThat(result.contains(s), Is.is(true));
         }
         System.out.println("result = " + result);
     }
