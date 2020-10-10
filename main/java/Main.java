@@ -3,6 +3,7 @@ import java.util.*;
 public class Main {
 
     public String makeNameNaive(List<String> names) {
+        bitLoop:
         while(names.size()>1){
             System.out.println(names.toString());
             //concat them and add to strings
@@ -25,20 +26,27 @@ public class Main {
                         System.out.println("removed: " + names.get(second) + " because " + names.get(first) + " contains it");
                         System.out.println(currentNamesSize);
                         names.remove(second);
-                        secondName = names.get(second);
                         currentNamesSize = names.size();
-                        int temp = Math.max(maxIndexFirstName, maxIndexSecondName);
-                        if(second < temp) removedSecondWords++;
+                        if(second == maxIndexFirstName || second == maxIndexSecondName) continue bitLoop;
+                        if(maxIndexFirstName > maxIndexSecondName && second < maxIndexFirstName) maxIndexFirstName--;
+                        if(maxIndexFirstName < maxIndexSecondName && second < maxIndexSecondName) maxIndexSecondName--;
+                        System.out.println("new " + names.toString());
+                        second--;
+                        continue;
                     }
 
                     if (secondName.contains(firstName)){
                         System.out.println("removed: " + names.get(first) + " because " + names.get(second) + " contains it");
                         names.remove(first);
                         currentNamesSize = names.size();
-                        second--;
+                        if(first == maxIndexFirstName || first == maxIndexSecondName) continue bitLoop;
+                        int temp = Math.max(maxIndexFirstName, maxIndexSecondName);
+                        if(maxIndexFirstName > maxIndexSecondName && first < maxIndexFirstName) maxIndexFirstName--;
+                        if(maxIndexFirstName < maxIndexSecondName && first < maxIndexSecondName) maxIndexSecondName--;
                         firstName = names.get(first);
-                        secondName = names.get(second);
-                        removedSecondWords++;
+                        System.out.println("new " + names.toString());
+                        second--;
+                        continue;
                     }
 
                     // FirstName + secondString overlap
@@ -62,11 +70,13 @@ public class Main {
                             maxIndexFirstName = first;
                             maxIndexSecondName = second;
                         }
+                        System.out.println("firstIndex" + maxIndexFirstName + " secondIndex " + maxIndexSecondName );
                     }
                 }
             }
 
-            System.out.println("most overlap is: " + maxAmountOfOverlap + " with strings: " + names.get(maxIndexFirstName) + " and " + names.get(maxIndexSecondName-removedSecondWords));
+
+            System.out.println("most overlap is: " + maxAmountOfOverlap + " with strings: " + names.get(maxIndexFirstName) + " and " + names.get(maxIndexSecondName));
 
             if(maxAmountOfOverlap == 0){
                 //no overlap found
@@ -80,8 +90,8 @@ public class Main {
             }
 
             //Handle String stuff
-            String firstName = names.get(maxIndexFirstName-removedFirstWords);
-            String secondName = names.get(maxIndexSecondName-removedSecondWords);
+            String firstName = names.get(maxIndexFirstName);
+            String secondName = names.get(maxIndexSecondName);
             String concatedString = firstName + secondName.substring(maxAmountOfOverlap);
             names.add(concatedString);
             if(maxIndexFirstName<maxIndexSecondName){

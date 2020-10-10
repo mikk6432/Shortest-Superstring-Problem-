@@ -10,7 +10,7 @@ import static org.junit.Assert.assertThat;
 
 class MainTest {
 
-    int listSize = 200;
+    int listSize = 500;
     List<String> names;
     List<String> original;
     Main testClass;
@@ -83,6 +83,32 @@ class MainTest {
         assertThat(Main.findOverlap(secondString, firstString), Is.is(0));
     }
 
+
+    @Test
+    public void removingWordsTest() {
+        List<String> strings = new ArrayList<>(5);
+        strings.add("abcde");
+        strings.add("klkll");
+        strings.add("kll");
+        strings.add("bcdef");
+        strings.add("bcdff");
+        System.out.println(strings.toString());
+        String result = testClass.makeNameNaive(strings);
+        System.out.println(result);
+    }
+
+    @Test
+    public void removingWords2Test() {
+        List<String> strings = new ArrayList<>(5);
+        strings.add("abcde");
+        strings.add("klkll");
+        strings.add("kll");
+        strings.add("bcdef");
+        strings.add("bcdefa");
+        System.out.println(strings.toString());
+        String result = testClass.makeNameNaive(strings);
+        System.out.println(result);
+    }
 
 
     @Test
